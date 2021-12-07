@@ -4,7 +4,7 @@ from models.staff import Staff
 
 
 def save(staff):
-    sql = "INSERT INTO tasks (name, start_date, department) VALUES (%s, %s, %s, %s) RETURNING *"
+    sql = "INSERT INTO staff (name, start_date, department, performance) VALUES (%s, %s, %s, %s) RETURNING *"
     values = [staff.name, staff.start_date, staff.department, staff.performance]
     results = run_sql(sql, values)
     id = results[0]['id']
@@ -13,20 +13,20 @@ def save(staff):
 
 
 def select_all():
-    tasks = []
+    staff_list = []
 
-    sql = "SELECT * FROM tasks"
+    sql = "SELECT * FROM staff"
     results = run_sql(sql)
 
     for row in results:
         staff = Staff(row['name'], row['start_date'], row['department'], row['performance'], row['id'] )
-        tasks.append(staff)
-    return tasks
+        staff_list.append(staff)
+    return staff_list
 
 
 def select(id):
     staff = None
-    sql = "SELECT * FROM tasks WHERE id = %s"
+    sql = "SELECT * FROM staff WHERE id = %s"
     values = [id]
     result = run_sql(sql, values)[0]
 
@@ -36,17 +36,17 @@ def select(id):
 
 
 def delete_all():
-    sql = "DELETE  FROM tasks"
+    sql = "DELETE  FROM staff"
     run_sql(sql)
 
 
 def delete(id):
-    sql = "DELETE  FROM tasks WHERE id = %s"
+    sql = "DELETE  FROM staff WHERE id = %s"
     values = [id]
     run_sql(sql, values)
 
 
 def update(staff):
-    sql = "UPDATE tasks SET (name, , start_date, department) = (%s, %s, %s, %s) WHERE id = %s"
+    sql = "UPDATE staff SET (name, start_date, department, performance) = (%s, %s, %s, %s) WHERE id = %s"
     values = [staff.name, staff.start_date, staff.department, staff.performance, staff.id]
     run_sql(sql, values)
